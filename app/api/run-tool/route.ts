@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import psutil from 'psutil'
 
 export async function POST(request: NextRequest) {
   try {
@@ -78,14 +77,16 @@ async function handleTopErrors(config: any) {
 
 async function handleCollectMetrics() {
   try {
+    // Simulate metrics collection (psutil not available in Vercel)
     const metrics = {
       timestamp: new Date().toISOString(),
-      cpu_percent: psutil.cpu_percent(),
-      memory_percent: psutil.virtual_memory().percent,
-      disk_percent: psutil.disk_usage('/').percent
+      cpu_percent: Math.random() * 100,
+      memory_percent: Math.random() * 100,
+      disk_percent: Math.random() * 100,
+      note: 'Simulated metrics (psutil not available in serverless environment)'
     }
     
-    return { metrics, message: 'Metrics collected successfully' }
+    return { metrics, message: 'Metrics collected successfully (simulated)' }
   } catch (error) {
     return { error: 'Failed to collect metrics' }
   }
@@ -93,20 +94,21 @@ async function handleCollectMetrics() {
 
 async function handleMonitorCpu() {
   try {
-    const cpu_percent = psutil.cpu_percent()
+    // Simulate CPU monitoring (psutil not available in Vercel)
+    const cpu_percent = Math.random() * 100
     const threshold = 80
     
     if (cpu_percent > threshold) {
       return {
         alert: true,
-        message: `High CPU usage: ${cpu_percent}% (threshold: ${threshold}%)`,
+        message: `High CPU usage: ${cpu_percent.toFixed(1)}% (threshold: ${threshold}%) - SIMULATED`,
         severity: 'critical'
       }
     }
     
     return {
       alert: false,
-      message: `CPU usage normal: ${cpu_percent}%`,
+      message: `CPU usage normal: ${cpu_percent.toFixed(1)}% - SIMULATED`,
       severity: 'info'
     }
   } catch (error) {
