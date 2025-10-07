@@ -4,25 +4,33 @@ export async function POST(request: NextRequest) {
   try {
     const { tool, config } = await request.json()
     
+    let result
     switch (tool) {
       case 'error-count':
-        return await handleErrorCount(config)
+        result = await handleErrorCount(config)
+        break
       
       case 'top-errors':
-        return await handleTopErrors(config)
+        result = await handleTopErrors(config)
+        break
       
       case 'collect-metrics':
-        return await handleCollectMetrics()
+        result = await handleCollectMetrics()
+        break
       
       case 'monitor-cpu':
-        return await handleMonitorCpu()
+        result = await handleMonitorCpu()
+        break
       
       case 'create-dashboard':
-        return await handleCreateDashboard(config)
+        result = await handleCreateDashboard(config)
+        break
       
       default:
         return NextResponse.json({ error: 'Unknown tool' }, { status: 400 })
     }
+    
+    return NextResponse.json(result)
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
